@@ -1,0 +1,109 @@
+/*
+ * Scaffolding
+ * Basic and global styles for generating a grid system, structural layout, and page templates
+ * ------------------------------------------------------------------------------------------- */
+
+
+// STRUCTURAL LAYOUT
+// -----------------
+
+html, body {
+  background-color: $white;
+}
+
+body {
+  margin: 0;
+  @include font_sans-serif(normal,$basefont,$baseline);
+  color: $grayDark;
+}
+
+// Container (centered, fixed-width layouts)
+.container {
+  @include fixed-container;
+}
+
+// Fluid layouts (left aligned, with sidebar, min- & max-width content)
+.container-fluid {
+  position: relative;
+  min-width: 940px;
+  padding-left: 20px;
+  padding-right: 20px;
+  @include clearfix;
+  > .sidebar {
+    float: left;
+    width: 220px;
+  }
+  // TODO in v2: rename this and .popover .content to be more specific
+  > .content {
+    margin-left: 240px;
+  }
+}
+
+
+// BASE STYLES
+// -----------
+
+// Links
+a {
+  color: $linkColor;
+  text-decoration: none;
+  line-height: inherit;
+  font-weight: inherit;
+  &:hover {
+    color: $linkColorHover;
+    text-decoration: underline;
+  }
+}
+
+// Quick floats
+.pull-right {
+  float: right;
+}
+.pull-left {
+  float: left;
+}
+
+// Toggling content
+.hide {
+  display: none;
+}
+.show {
+  display: block;
+}
+
+
+// GRID SYSTEM
+// -----------
+// To customize the grid system, bring up the variables.less file and change the column count, size, and gutter there
+
+.row {
+  @include clearfix;
+  margin-left: -1 * $gridGutterWidth;
+}
+
+// Find all .span# classes within .row and give them the necessary properties for grid columns (supported by all browsers back to IE7)
+// Credit to @dhg for the idea
+[class*="span"] {
+  @include gridColumn;
+}
+
+// Default columns
+@each $n in 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 {
+  .span#{$n} { @include columns($n); }
+}
+
+// For optional 24-column grid
+@each $n in 17 18 19 20 21 22 23 24 {
+  .span#{$n} { @include columns($n); }
+}
+
+// Offset column options
+@each $n in 1 2 3 4 5 6 7 8 9 10 11 12 {
+  .offset#{$n} { @include offset($n); }
+}
+
+// Unique column sizes for 16-column grid
+.span-one-third     { width: 300px; }
+.span-two-thirds    { width: 620px; }
+.offset-one-third   { margin-left: 340px; }
+.offset-two-thirds  { margin-left: 660px; }
