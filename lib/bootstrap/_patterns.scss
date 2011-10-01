@@ -838,6 +838,7 @@ input[type=submit].btn {
   border-right: $arrowWidth solid transparent;
   border-top: $arrowWidth solid $black;
 }
+
 @mixin popoverArrow_left($arrowWidth: 5px) {
   top: 50%;
   right: 0;
@@ -846,6 +847,7 @@ input[type=submit].btn {
   border-bottom: $arrowWidth solid transparent;
   border-left: $arrowWidth solid $black;
 }
+
 @mixin popoverArrow_below($arrowWidth: 5px) {
   top: 0;
   left: 50%;
@@ -854,6 +856,7 @@ input[type=submit].btn {
   border-right: $arrowWidth solid transparent;
   border-bottom: $arrowWidth solid $black;
 }
+
 @mixin popoverArrow_right($arrowWidth: 5px) {
   top: 50%;
   left: 0;
