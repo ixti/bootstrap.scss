@@ -1,7 +1,7 @@
 bootstrap.scss
 ==============
 
-Yet another SASS port of Twitter's Bootstrap CSS toolkit.
+Yet another SASS port of [Twitter's Bootstrap][1] CSS toolkit.
 
 
 Why there's no Makefile or docs?
@@ -24,3 +24,6 @@ Why SASS, when it was LESS?
 * Because I prefer SASS over LESS.
 * Because I want to have one technology per task in my projects (e.g. for RoR
   based projects).
+
+
+[1]: https://github.com/twitter/bootstrap
