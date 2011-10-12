@@ -3,42 +3,42 @@
  * ---------------------------------------------------------------------------- */
 
 
-// TOPBAR
-// ------
+// NAVBAR (FIXED AND STATIC)
+// -------------------------
 
-// Topbar for Branding and Nav
-.topbar {
-  height: 40px;
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 10000;
+// Navbar variables
+$navBarHeight: 40px;
+$navBarBgStart: #333;
+$navBarBgEnd: #222;
+
+// Common styles
+.navbar {
+  height: $navBarHeight;
   overflow: visible;
-
-  // Links get text shadow
+}
+// gradient is applied to it's own element because overflow visible is not honored by ie when filter is present
+.navbar-inner {
+  background-color: $navBarBgEnd;
+  @include gradient_vertical($navBarBgStart, $navBarBgEnd);
+  $shadow: 0 1px 3px rgba(0,0,0,.25), inset 0 -1px 0 rgba(0,0,0,.1);
+  @include box-shadow($shadow);
+}
+// Text and links
+.navbar {
+  // Links get text-shadow
   a {
     color: $grayLight;
     text-shadow: 0 -1px 0 rgba(0,0,0,.25);
   }
-
   // Hover and active states
-  // h3 for backwards compatibility
-  h3 a:hover,
   .brand a:hover,
   ul .active > a {
-    background-color: #333;
+    background-color: $navBarBgStart;
     background-color: rgba(255,255,255,.05);
     color: $white;
     text-decoration: none;
   }
-
-  // Website name
-  // h3 left for backwards compatibility
-  h3 {
-    position: relative;
-  }
-  h3 a,
+  // Website or project name
   .brand {
     float: left;
     display: block;
@@ -59,19 +59,15 @@
       color: $white;
     }
   }
+}
 
-  // Search Form
-  form {
-    float: left;
-    margin: 5px 0 0 0;
-    position: relative;
-    @include opacity(100);
-  }
-  // Todo: remove from v2.0 when ready, added for legacy
-  form.pull-right {
-    float: right;
-  }
-  input {
+// Navbar search
+.navbar-search {
+  position: relative;
+  margin-top: 6px;
+  margin-bottom: 0;
+  float: left;
+  .search-query {
     background-color: #444;
     background-color: rgba(255,255,255,.3);
     @include font_sans-serif(13px, normal, 1);
@@ -79,8 +75,7 @@
     color: $white;
     color: rgba(255,255,255,.75);
     border: 1px solid #111;
-    @include border-radius(4px);
-    $shadow: inset 0 1px 2px rgba(0,0,0,.1), 0 1px 0px rgba(255,255,255,.25);
+    $shadow: inset 0 1px 2px rgba(0,0,0,.1), 0 1px 0px rgba(255,255,255,.15);
     @include box-shadow($shadow);
     @include transition(none);
 
@@ -111,24 +106,34 @@
   }
 }
 
-// gradient is applied to it's own element because overflow visible is not honored by ie when filter is present
-// For backwards compatibility, include .topbar .fill
-.topbar-inner,
-.topbar .fill {
-  background-color: #222;
-  @include gradient_vertical(#333, #222);
-  $shadow: 0 1px 3px rgba(0,0,0,.25), inset 0 -1px 0 rgba(0,0,0,.1);
-  @include box-shadow($shadow);
+
+// Static navbar
+.navbar-static {
+  margin-bottom: $baseLineHeight;
+}
+.navbar-static .navbar-inner {
+  margin-left:  -20px;
+  margin-right: -20px;
+  padding-left:  20px;
+  padding-right: 20px;
+  .border-radius(4px);
+}
+
+// Fixed navbar
+.navbar-fixed {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 10000;
 }
 
 
 // NAVIGATION
 // ----------
 
-// Topbar Nav
+// Nav for navbar and topbar
 // ul.nav for all topbar based navigation to avoid inheritance issues and over-specificity
-// For backwards compatibility, leave in .topbar div > ul
-.topbar div > ul,
 .nav {
   display: block;
   float: left;
@@ -160,28 +165,19 @@
     float: right;
     margin-left: 10px;
     margin-right: 0;
-    // backwards compatibility
-    .menu-dropdown,
     .dropdown-menu {
       right: 0;
       border: 0;
     }
   }
   // Dropdowns within the .nav
-  // a.menu:hover and li.open .menu for backwards compatibility
-  a.menu:hover,
-  li.open .menu,
   .dropdown-toggle:hover,
   .dropdown.open .dropdown-toggle {
     background: #444;
     background: rgba(255,255,255,.05);
   }
-  // .menu-dropdown for backwards compatibility
-  .menu-dropdown,
   .dropdown-menu {
     background-color: #333;
-    // a.menu for backwards compatibility
-    a.menu,
     .dropdown-toggle {
       color: $white;
       &.open {
@@ -207,22 +203,16 @@
   }
 }
 
-// For backwards compatibility with new dropdowns, redeclare dropdown link padding
-.topbar ul .menu-dropdown li a,
 .topbar ul .dropdown-menu li a {
   padding: 4px 15px;
 }
 
 // Dropdown Menus
 // Use the .menu class on any <li> element within the topbar or ul.tabs and you'll get some superfancy dropdowns
-// li.menu for backwards compatibility
-li.menu,
 .dropdown {
   position: relative;
 }
 // The link that is clicked to toggle the dropdown
-// a.menu for backwards compatibility
-a.menu:after,
 .dropdown-toggle:after {
   width: 0;
   height: 0;
@@ -231,15 +221,16 @@ a.menu:after,
   text-indent: -99999px;
   vertical-align: top;
   margin-top: 8px;
-  margin-left: 4px;
+  margin-left: 6px;
   border-left: 4px solid transparent;
   border-right: 4px solid transparent;
   border-top: 4px solid $white;
-  @include opacity(50);
+  @include opacity(30);
+}
+.dropdown:hover .dropdown-toggle:after {
+  .opacity(100);
 }
 // The dropdown menu (ul)
-// .menu-dropdown for backwards compatibility
-.menu-dropdown,
 .dropdown-menu {
   background-color: $white;
   float: left;
@@ -300,18 +291,12 @@ a.menu:after,
 }
 
 // Open state for the dropdown
-// .open for backwards compatibility
-.open,
 .dropdown.open {
-  // .menu for backwards compatibility
-  .menu,
   .dropdown-toggle {
     color: $white;
     background: #ccc;
     background: rgba(0,0,0,.3);
   }
-  // .menu-dropdown for backwards compatibility
-  .menu-dropdown,
   .dropdown-menu {
     display: block;
   }
@@ -333,18 +318,18 @@ a.menu:after,
   }
 }
 
-// Basic Tabs
+// Tabs
 .tabs {
-  float: left;
-  width: 100%;
-  border-bottom: 1px solid #ddd;
+  border-color: #ddd;
+  border-style: solid;
+  border-width: 0 0 1px;
   > li {
     position: relative; // For the dropdowns mostly
-    top: 1px;
+    margin-bottom: -1px;
     > a {
       padding: 0 15px;
       margin-right: 2px;
-      line-height: $baseline * 2;
+      line-height: $baseLineHeight * 2;
       border: 1px solid transparent;
       @include border-radius(4px 4px 0 0);
       &:hover {
@@ -353,13 +338,68 @@ a.menu:after,
         border-color: #eee #eee #ddd;
       }
     }
-    &.active > a {
-      color: $gray;
-      background-color: $white;
-      border: 1px solid #ddd;
+  }
+  // Active state, and it's :hover to override normal :hover
+  .active > a,
+  .active > a:hover {
+    color: $gray;
+    background-color: $white;
+    border: 1px solid #ddd;
+    border-bottom-color: transparent;
+    cursor: default;
+  }
+}
+
+.tabbable {
+  margin-bottom: $baseLineHeight;
+
+  // Tabs on top
+  .tabs {
+    margin-bottom: 0;
+    border-bottom: 0;
+  }
+  .tab-content {
+    padding: 19px;
+    border: 1px solid #ddd;
+  }
+
+  // Tabs on bottom
+  &.tabs-bottom .tabs > li {
+    margin-top: -1px;
+    margin-bottom: 0;
+  }
+  &.tabs-bottom .tabs > li > a {
+    @include border-radius(0 0 4px 4px);
+    &:hover {
       border-bottom-color: transparent;
+      border-top-color: #ddd;
     }
   }
+  &.tabs-bottom .tabs > .active > a,
+  &.tabs-bottom .tabs > .active > a:hover {
+    border-color: transparent #ddd #ddd #ddd;
+  }
+
+  // Tabs on left
+  &.tabs-left .tabs {
+    float: left;
+  }
+  &.tabs-left .tabs > li {
+    float: none;
+  }
+
+  // Tabs on right
+  &.tabs-right .tabs {
+    float: right;
+  }
+  &.tabs-right .tabs > li {
+    float: none;
+  }
+}
+
+
+// Dropdowns in tabs
+.tabs {
   // first one for backwards compatibility
   .menu-dropdown,
   .dropdown-menu {
@@ -385,40 +425,45 @@ a.menu:after,
     border-top-color: #555;
   }
 }
-.tab-content {
-  clear: both;
-}
 
-// Basic pill nav
+// Pills
 .pills {
   a {
-      margin: 5px 3px 5px 0;
+    margin: 5px 3px 5px 0;
     padding: 0 15px;
-    text-shadow: 0 1px 1px $white;
     line-height: 30px;
+    text-shadow: 0 1px 1px $white;
     @include border-radius(15px);
     &:hover {
-      background: $linkColorHover;
       color: $white;
       text-decoration: none;
       text-shadow: 0 1px 1px rgba(0,0,0,.25);
+      background: $linkColorHover;
     }
   }
   .active a {
-    background: $linkColor;
     color: $white;
     text-shadow: 0 1px 1px rgba(0,0,0,.25);
+    background: $linkColor;
   }
 }
 
-.tab-content > *,
-.pill-content > * {
-  display: none;
+// Stacked pills
+.pills-vertical > li {
+  float: none;
 }
 
+// Tabbable areas
+.tab-content,
+.pill-content {
+}
+.tab-content > .tab-pane,
+.pill-content > .pill-pane {
+  display: none;
+}
 .tab-content > .active,
 .pill-content > .active {
-  display:block;
+  display: block;
 }
 
 
@@ -426,7 +471,7 @@ a.menu:after,
 // -----------
 
 .breadcrumb {
-  margin: 0 0 $baseline;
+  margin: 0 0 $baseLineHeight;
   padding: 7px 14px;
   @include gradient_vertical(#ffffff, #f5f5f5);
   border: 1px solid #ddd;
@@ -439,8 +484,6 @@ a.menu:after,
   .divider {
     padding: 0 5px;
     color: $grayLight;
-  }
-  a {
   }
   .active a {
     color: $grayDark;
@@ -465,12 +508,12 @@ a.menu:after,
   p {
     font-size: 18px;
     font-weight: 200;
-    line-height: $baseline * 1.5;
+    line-height: $baseLineHeight * 1.5;
   }
 }
 footer {
-  margin-top: $baseline - 1;
-  padding-top: $baseline - 1;
+  margin-top: $baseLineHeight - 1;
+  padding-top: $baseLineHeight - 1;
   border-top: 1px solid #eee;
 }
 
@@ -479,11 +522,11 @@ footer {
 // ------------
 
 .page-header {
-  margin-bottom: $baseline - 1;
+  margin-bottom: $baseLineHeight - 1;
   border-bottom: 1px solid #ddd;
   @include box-shadow(0 1px 0 rgba(255,255,255,.5));
   h1 {
-    margin-bottom: ($baseline / 2) - 1px;
+    margin-bottom: ($baseLineHeight / 2) - 1px;
   }
 }
 
@@ -529,7 +572,7 @@ footer {
   padding: 5px 14px 6px;
   text-shadow: 0 1px 1px rgba(255,255,255,.75);
   color: #333;
-  font-size: $basefont;
+  font-size: $baseFontSize;
   line-height: normal;
   border: 1px solid #ccc;
   border-bottom-color: #bbb;
@@ -581,14 +624,14 @@ footer {
 
   // Button Sizes
   &.large {
-    font-size: $basefont + 2px;
+    font-size: $baseFontSize + 2px;
     line-height: normal;
     padding: 9px 14px 9px;
     @include border-radius(6px);
   }
   &.small {
     padding: 7px 9px 7px;
-    font-size: $basefont - 2px;
+    font-size: $baseFontSize - 2px;
   }
 }
 // Super jank hack for removing border-radius from IE9 so we can keep filter gradients on alerts and buttons
@@ -606,6 +649,54 @@ input[type=submit].btn {
   }
 }
 
+// Button groups
+// -------------
+
+// Group multiple button groups together for a toolbar
+.btn-toolbar {
+  @include clearfix;
+  .btn-group {
+    float: left;
+    margin-right: 10px;
+  }
+}
+
+// Clear the float
+.btn-group {
+  @include clearfix;
+}
+// Float them, remove border radius, then re-add to first and last elements
+.btn-group .btn {
+  position: relative;
+  float: left;
+  margin-left: -1px;
+  @include border-radius(0);
+  &:first-child {
+    margin-left: 0;
+       -webkit-border-top-left-radius: 4px;
+           -moz-border-radius-topleft: 4px;
+               border-top-left-radius: 4px;
+    -webkit-border-bottom-left-radius: 4px;
+        -moz-border-radius-bottomleft: 4px;
+            border-bottom-left-radius: 4px;
+  }
+  &:last-child {
+       -webkit-border-top-right-radius: 4px;
+           -moz-border-radius-topright: 4px;
+               border-top-right-radius: 4px;
+    -webkit-border-bottom-right-radius: 4px;
+        -moz-border-radius-bottomright: 4px;
+            border-bottom-right-radius: 4px;
+  }
+}
+// On hover/focus/active, bring the proper btn to front
+.btn-group .btn:hover,
+.btn-group .btn:focus,
+.btn-group .btn:active {
+  z-index: 2;
+}
+
+
 
 // CLOSE ICONS
 // -----------
@@ -614,7 +705,7 @@ input[type=submit].btn {
   color: $black;
   font-size: 20px;
   font-weight: bold;
-  line-height: $baseline * .75;
+  line-height: $baseLineHeight * .75;
   text-shadow: 0 1px 0 rgba(255,255,255,1);
   @include opacity(20);
   &:hover {
@@ -632,7 +723,7 @@ input[type=submit].btn {
 .alert-message {
   position: relative;
   padding: 7px 15px;
-  margin-bottom: $baseline;
+  margin-bottom: $baseLineHeight;
   color: $grayDark;
   @include gradientBar(#fceec1, #eedc94); // warning by default
   text-shadow: 0 1px 0 rgba(255,255,255,.5);
@@ -648,7 +739,7 @@ input[type=submit].btn {
 
   // Remove extra margin from content
   h5 {
-    line-height: $baseline;
+    line-height: $baseLineHeight;
   }
   p {
     margin-bottom: 0;
@@ -708,8 +799,8 @@ input[type=submit].btn {
 // ----------
 
 .pagination {
-  height: $baseline * 2;
-  margin: $baseline 0;
+  height: $baseLineHeight * 2;
+  margin: $baseLineHeight 0;
   ul {
     float: left;
     margin: 0;
@@ -724,7 +815,7 @@ input[type=submit].btn {
   a {
     float: left;
     padding: 0 14px;
-    line-height: ($baseline * 2) - 2;
+    line-height: ($baseLineHeight * 2) - 2;
     border-right: 1px solid;
     border-right-color: #ddd;
     border-right-color: rgba(0,0,0,.15);
@@ -966,11 +1057,10 @@ input[type=submit].btn {
 .label {
   padding: 1px 3px 2px;
   background-color: $grayLight;
-  font-size: $basefont * .75;
+  font-size: $baseFontSize * .75;
   font-weight: bold;
   color: $white;
   text-transform: uppercase;
-  white-space: nowrap;
   @include border-radius(3px);
   &.important { background-color: #c43c35; }
   &.warning   { background-color: $orange; }
