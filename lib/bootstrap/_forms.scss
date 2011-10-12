@@ -3,9 +3,10 @@
  * ------------------------------------------------------------- */
 
 
-// FORM STYLES
-// -----------
+// GENERAL STYLES
+// --------------
 
+// Make all forms have space below them
 form {
   margin-bottom: $baseLineHeight;
 }
@@ -177,7 +178,7 @@ textarea[readonly] {
 // -----------
 
 // Set color of error text
-@error-text: desaturate(lighten(@red, 25%), 25%);
+$error-text: desaturate(lighten($red, 25%), 25%);
 
 // Style the background of control-groups with errors
 .has-error {
@@ -229,7 +230,7 @@ textarea[readonly] {
   background-color: $white;
   display: block;
   border-color: #eee;
-  .box-shadow(inset 0 1px 2px rgba(0,0,0,.025));
+  @include box-shadow(inset 0 1px 2px rgba(0,0,0,.025));
   cursor: not-allowed;
 }
 

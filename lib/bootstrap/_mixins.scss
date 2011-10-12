@@ -112,7 +112,7 @@
           background-clip: padding-box;
 }
 
-$mixin border-radius-custom($topLeft, $topRight, $bottomRight, $bottomLeft) {
+@mixin border-radius-custom($topLeft, $topRight, $bottomRight, $bottomLeft) {
   -webkit-border-top-left-radius: $topLeft;
       -moz-border-radius-topleft: $topLeft;
           border-top-left-radius: $topLeft;
@@ -254,7 +254,7 @@ $mixin border-radius-custom($topLeft, $topRight, $bottomRight, $bottomLeft) {
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#{$startColor}', endColorstr='#{$endColor}', GradientType=0); // IE9 and down, gets no color-stop at all for proper fallback
 }
 
-$mixin gradient_radial($centerColor: #555, $outsideColor: #333)  {
+@mixin gradient_radial($centerColor: #555, $outsideColor: #333)  {
   background-color: $outsideColor;
   background-image: -webkit-gradient(radial, center center, 0, center center, 460, from($centerColor), to($outsideColor));
   background-image: -webkit-radial-gradient(circle, $centerColor, $outsideColor);
