@@ -1,0 +1,33 @@
+#!/usr/bin/env ruby
+
+require File.expand_path("../css_parser.rb", __FILE__)
+require File.expand_path("../hash_diff.rb", __FILE__)
+
+
+$a_file, $b_file = ARGV[0], ARGV[1]
+
+
+def parse file
+  Blueprint::CSSParser.new(File.read file).parse
+end
+
+def show_diff k, a, b
+  puts "--- #{$a_file}: (#{k}) #{a}"
+  puts "+++ #{$b_file}: (#{k}) #{b}"
+  puts ""
+end
+  
+
+a, b = parse($a_file), parse($b_file)
+
+
+0.upto([a.size, b.size].max - 1) do |i|
+  if a[i].nil? or b[i].nil?
+    show_diff 'block', a[i], b[i]
+    next
+  end
+
+  unless (diff = a[i].diff b[i]).empty?
+    diff.each_key{ |k| show_diff k, a[i][k], b[i][k] }
+  end
+end

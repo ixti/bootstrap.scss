@@ -1,0 +1,12 @@
+#!/usr/bin/env ruby
+
+require File.expand_path("../css_parser.rb", __FILE__)
+
+data = Blueprint::CSSParser.new(ARGF.read).to_s
+
+data.gsub!(/\s+/, ' ')
+data.gsub!(/#ffffff/, 'white')
+data.gsub!(/#000000/, 'black')
+data.gsub!(/#808080/, 'gray')
+
+puts data
