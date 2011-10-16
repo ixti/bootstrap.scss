@@ -86,7 +86,7 @@
 }
 
 @mixin offset($columnOffset: 1) {
-  margin-left: ($gridColumnWidth * $columnOffset) + ($gridGutterWidth * ($columnOffset - 1)) + $extraSpace;
+  margin-left: ($gridColumnWidth * $columnOffset) + ($gridGutterWidth * ($columnOffset - 1)) + $gridGutterWidth;
 }
 
 // Necessary grid styles for every column to make them appear next to each other horizontally
@@ -107,9 +107,6 @@
   -webkit-border-radius: $radius;
      -moz-border-radius: $radius;
           border-radius: $radius;
-  -webkit-background-clip: padding-box;
-     -moz-background-clip: padding;
-          background-clip: padding-box;
 }
 
 @mixin border-radius-custom($topLeft, $topRight, $bottomRight, $bottomLeft) {
