@@ -378,20 +378,79 @@ $navBarBgEnd: #222;
     border-color: transparent #ddd #ddd #ddd;
   }
 
-  // Tabs on left
-  &.tabs-left .tabs {
-    float: left;
+  // Tabs on left and right
+  &.tabs-left,
+  &.tabs-right {
+    @include clearfix;
+    .tabs {
+      // Give a fixed width to avoid floating .tab-con
+      width: 100px;
+      // Unfloat them so they stack
+      > li {
+        float: none;
+        margin-bottom: -1px;
+        > a {
+          margin-bottom: 2px;
+          &:hover {
+            border-color: transparent;
+          }
+        }
+      }
+    }
   }
-  &.tabs-left .tabs > li {
-    float: none;
+
+  // Tabs on left
+  &.tabs-left {
+    .tab-content {
+      margin-left: 100px;
+    }
+    .tabs {
+      float: left;
+      > li {
+        margin-right: -1px;
+        > a {
+          margin-right: 0;
+          @include border-radius(4px 0 0 4px);
+
+          &:hover {
+            border-right-color: #ddd;
+          }
+        }
+      }
+      // Active state
+      .active > a,
+      .active > a:hover {
+        border-color: #ddd;
+        border-right-color: transparent;
+      }
+    }
   }
 
   // Tabs on right
-  &.tabs-right .tabs {
-    float: right;
-  }
-  &.tabs-right .tabs > li {
-    float: none;
+  &.tabs-right {
+    .tab-content {
+      margin-right: 100px;
+    }
+    .tabs {
+      float: right;
+      > li {
+        margin-left: -1px;
+        > a {
+          margin-left: 0;
+          @include border-radius(0 4px 4px 0);
+
+          &:hover {
+            border-left-color: #ddd;
+          }
+        }
+      }
+      // Active state
+      .active > a,
+      .active > a:hover {
+        border-color: #ddd;
+        border-left-color: transparent;
+      }
+    }
   }
 }
 
