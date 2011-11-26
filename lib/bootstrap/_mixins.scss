@@ -9,9 +9,9 @@
   &:before,
   &:after {
     display: table;
+    *display: inline;
     content: "";
     zoom: 1;
-    *display: inline;
   }
   &:after {
     clear: both;
@@ -27,8 +27,8 @@
 
 // Sizing shortcuts
 @mixin size($height: 5px, $width: 5px) {
-  height: $height;
   width: $width;
+  height: $height;
 }
 
 @mixin square($size: 5px) {
@@ -46,31 +46,37 @@
 }
 
 // Font Stacks
-@mixin font_shorthand($weight: normal, $size: $baseFontSize, $lineHeight: $baseLineHeight) {
-  font-size: $size;
-  font-weight: $weight;
-  line-height: $lineHeight;
-}
-
-@mixin font_sans-serif($weight: normal, $size: $baseFontSize, $lineHeight: $baseLineHeight) {
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size: $size;
-  font-weight: $weight;
-  line-height: $lineHeight;
-}
-
-@mixin font_serif($weight: normal, $size: $baseFontSize, $lineHeight: $baseLineHeight) {
+@mixin font_family_serif() {
   font-family: "Georgia", Times New Roman, Times, serif;
+}
+
+@mixin font_family_sans-serif() {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+@mixin font_family_monospace() {
+  font-family: "Menlo", Monaco, Courier New, monospace;
+}
+
+@mixin font_shorthand($size: $baseFontSize, $weight: normal, $lineHeight: $baseLineHeight) {
   font-size: $size;
   font-weight: $weight;
   line-height: $lineHeight;
 }
 
-@mixin font_monospace($weight: normal, $size: $baseFontSize, $lineHeight: $baseLineHeight) {
-  font-family: Menlo, Monaco, Andale Mono, Courier New, monospace;
-  font-size: $size;
-  font-weight: $weight;
-  line-height: $lineHeight;
+@mixin font_serif($size: $baseFontSize, $weight: normal, $lineHeight: $baseLineHeight) {
+  @include font_family_serif;
+  @include font_shorthand($size, $weight, $lineHeigh);
+}
+
+@mixin font_sans-serif($size: $baseFontSize, $weight: normal, $lineHeight: $baseLineHeight) {
+  @include font_family_sans-serif;
+  @include font_shorthand($size, $weight, $lineHeight);
+}
+
+@mixin font_monospace($size: $baseFontSize, $weight: normal, $lineHeight: $baseLineHeight) {
+  @include font_family_monospace;
+  @include font_shorthand($size, $weight, $lineHeight);
 }
 
 // Grid System
@@ -145,7 +151,7 @@
 
 // Transform for scale and rotate
 // translate, rotate, scale -- need to finalize
-@mixin rotation($degrees: 5deg) {
+@mixin rotate($degrees: 5deg) {
   -webkit-transform: rotate($degrees);
      -moz-transform: rotate($degrees);
       -ms-transform: rotate($degrees);
@@ -198,13 +204,15 @@
 
 @mixin translucent_border($color: $white, $alpha: 1) {
   border-color: hsla(hue($color), saturation($color), lightness($color), $alpha);
-  background-clip: padding-box;
+  -webkit-background-clip: padding-box;
+     -moz-background-clip: padding;
+          background-clip: padding-box;
 }
 
-// Gradient Bar Colors for buttons and allerts
+// Gradient Bar Colors for buttons and alerts
 @mixin gradientBar($primaryColor, $secondaryColor) {
-  @include gradient_vertical($primaryColor, $secondaryColor);
   text-shadow: 0 -1px 0 rgba(0,0,0,.25);
+  @include gradient_vertical($primaryColor, $secondaryColor);
   border-color: $secondaryColor $secondaryColor darken($secondaryColor, 15%);
   border-color: rgba(0,0,0,.1) rgba(0,0,0,.1) opacify(rgba(0,0,0,.1), 0.15);
 }
@@ -276,7 +284,41 @@
 // Opacity
 @mixin opacity($opacity: 100) {
 	filter: alpha(opacity=#{$opacity});
-	-khtml-opacity: $opacity / 100;
 	  -moz-opacity: $opacity / 100;
 	       opacity: $opacity / 100;
+}
+
+// Popover arrows
+// For tipsies and popovers
+@mixin popoverArrow_above($arrowWidth: 5px) {
+  bottom: 0;
+  left: 50%;
+  margin-left: -$arrowWidth;
+  border-left: $arrowWidth solid transparent;
+  border-right: $arrowWidth solid transparent;
+  border-top: $arrowWidth solid $black;
+}
+@mixin popoverArrow_left($arrowWidth: 5px) {
+  top: 50%;
+  right: 0;
+  margin-top: -$arrowWidth;
+  border-top: $arrowWidth solid transparent;
+  border-bottom: $arrowWidth solid transparent;
+  border-left: $arrowWidth solid $black;
+}
+@mixin popoverArrow_below($arrowWidth: 5px) {
+  top: 0;
+  left: 50%;
+  margin-left: -$arrowWidth;
+  border-left: $arrowWidth solid transparent;
+  border-right: $arrowWidth solid transparent;
+  border-bottom: $arrowWidth solid $black;
+}
+@mixin popoverArrow_right($arrowWidth: 5px) {
+  top: 50%;
+  left: 0;
+  margin-top: -$arrowWidth;
+  border-top: $arrowWidth solid transparent;
+  border-bottom: $arrowWidth solid transparent;
+  border-right: $arrowWidth solid $black;
 }

@@ -68,11 +68,11 @@ input[type=radio] {
 
 // Reset the file input to browser defaults
 input[type=file] {
+  padding: initial;
+  line-height: initial;
+  border: initial;
   background-color: $white;
   background-color: initial;
-  padding: initial;
-  border: initial;
-  line-height: initial;
   @include box-shadow(none);
 }
 
@@ -84,17 +84,18 @@ input[type=submit] {
   height: auto;
 }
 
+// Set the height of select and file controls to match text inputs
 select,
 input[type=file] {
   height: $baseLineHeight * 1.5; // In IE7, the height of the select element cannot be changed by height, only font-size
-  line-height: $baseLineHeight * 1.5;
   *margin-top: 4px; /* For IE7, add top margin to align select with labels */
+  line-height: $baseLineHeight * 1.5;
 }
 
 // Make multiple select elements height not fixed
 select[multiple] {
-  background-color: $white; // Fixes Chromium bug?
   height: inherit;
+  background-color: $white; // Fixes Chromium bug?
 }
 
 textarea {
@@ -106,16 +107,16 @@ textarea {
 
 input,
 textarea {
+  @include box-shadow(inset 0 1px 3px rgba(0,0,0,.1));
   $transition: border linear .2s, box-shadow linear .2s;
   @include transition($transition);
-  @include box-shadow(inset 0 1px 3px rgba(0,0,0,.1));
 }
 input:focus,
 textarea:focus {
-  outline: 0;
   border-color: rgba(82,168,236,.8);
   $shadow: inset 0 1px 3px rgba(0,0,0,.1), 0 0 8px rgba(82,168,236,.6);
   @include box-shadow($shadow);
+  outline: 0;
 }
 input[type=file]:focus,
 input[type=checkbox]:focus,
@@ -146,7 +147,8 @@ select:focus {
 
 input,
 textarea,
-select {
+select,
+.uneditable-input {
   // Default columns
   @each $n in 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 {
     &.span#{$n} { @include formColumns($n); }
@@ -170,41 +172,46 @@ textarea[readonly] {
 }
 
 
-// ERROR STATE
-// -----------
+// FORM FIELD FEEDBACK STATES
+// --------------------------
 
-// Set color of error text
-$error-text: desaturate(lighten($red, 25%), 25%);
-
-// Style the background of control-groups with errors
-.has-error {
-  background: lighten($red, 55%);
-  padding: ($baseLineHeight / 2) 0;
-  margin: -10px 0 10px;
-  @include border-radius(4px);
+// Mixin for form field states
+@mixin formFieldState($textColor: #555, $borderColor: #ccc, $backgroundColor: #f5f5f5) {
+  // Set the text color
   > label,
-  span.help-inline,
-  span.help-block {
-    color: $red;
+  .help-block,
+  .help-inline {
+    color: $textColor;
   }
+  // Style inputs accordingly
   input,
-  textarea,
-  select {
-    border-color: $error-text;
-    @include box-shadow(0 0 3px rgba(171,41,32,.25));
+  textarea {
+    color: $textColor;
+    border-color: $borderColor;
     &:focus {
-      border-color: darken($error-text, 10%);
-      @include box-shadow(0 0 6px rgba(171,41,32,.5));
+      border-color: darken($borderColor, 10%);
+      @include box-shadow(0 0 6px lighten($borderColor, 20%));
     }
   }
-  .input-prepend,
-  .input-append {
-    span.add-on {
-      background: lighten($red, 50%);
-      border-color: $error-text;
-      color: darken($error-text, 10%);
-    }
+  // Give a small background color for input-prepend/-append
+  .input-prepend .add-on,
+  .input-append .add-on {
+    color: $textColor;
+    background-color: $backgroundColor;
+    border-color: $textColor;
   }
+}
+// Error
+form .clearfix.error {
+  @include formFieldState(#b94a48, #ee5f5b, lighten(#ee5f5b, 30%));
+}
+// Warning
+form .clearfix.warning {
+  @include formFieldState(#c09853, #ccae64, lighten(#CCAE64, 5%));
+}
+// Success
+form .clearfix.success {
+  @include formFieldState(#468847, #57a957, lighten(#57a957, 30%));
 }
 
 
@@ -220,11 +227,10 @@ $error-text: desaturate(lighten($red, 25%), 25%);
   border-top: 1px solid #ddd;
 }
 
-
 // For text that needs to appear as an input but should not be an input
 .uneditable-input {
-  background-color: $white;
   display: block;
+  background-color: $white;
   border-color: #eee;
   @include box-shadow(inset 0 1px 2px rgba(0,0,0,.025));
   cursor: not-allowed;
@@ -250,10 +256,10 @@ $error-text: desaturate(lighten($red, 25%), 25%);
 }
 
 .help-inline {
-  display: inline;
-  padding-left: 5px;
   *position: relative; /* IE6-7 */
   *top: -5px; /* IE6-7 */
+  display: inline;
+  padding-left: 5px;
 }
 
 // Big blocks of help text
@@ -261,6 +267,7 @@ $error-text: desaturate(lighten($red, 25%), 25%);
   display: block;
   max-width: 600px;
 }
+
 
 
 // INLINE FIELDS
@@ -294,25 +301,25 @@ $error-text: desaturate(lighten($red, 25%), 25%);
   }
   .add-on {
     position: relative;
-    background: #f5f5f5;
-    border: 1px solid #ccc;
     z-index: 2;
     float: left;
     display: block;
     width: auto;
     min-width: 16px;
     height: $baseLineHeight;
-    padding: 4px 4px 4px 5px;
     margin-right: -1px;
+    padding: 4px 4px 4px 5px;
     font-weight: normal;
     line-height: $baseLineHeight;
     color: $grayLight;
     text-align: center;
     text-shadow: 0 1px 0 $white;
+    background-color: #f5f5f5;
+    border: 1px solid #ccc;
     @include border-radius(3px 0 0 3px);
   }
   .active {
-    background: lighten($green, 30);
+    background-color: lighten($green, 30);
     border-color: $green;
   }
 }
@@ -327,19 +334,18 @@ $error-text: desaturate(lighten($red, 25%), 25%);
     @include border-radius(3px 0 0 3px);
   }
   .add-on {
-    @include border-radius(0 3px 3px 0);
     margin-right: 0;
     margin-left: -1px;
+    @include border-radius(0 3px 3px 0);
   }
 }
-
 
 
 
 // SEARCH FORM
 // -----------
 
-.form-search .search-query {
+.search-form .search-query {
   @include border-radius(14px);
 }
 
@@ -348,7 +354,6 @@ $error-text: desaturate(lighten($red, 25%), 25%);
 // HORIZONTAL & VERTICAL FORMS
 // ---------------------------
 
-
 // Common properties
 // -----------------
 
@@ -356,36 +361,32 @@ $error-text: desaturate(lighten($red, 25%), 25%);
 .control-group {
   margin-bottom: $baseLineHeight;
 }
-
 // Bold the labels so they stand out
 .control-group > label {
   font-weight: bold;
 }
 
-// Lists of controls (checkboxes and radios)
-.control-list {
-}
-
-
 // Horizontal-specific styles
 // --------------------------
 
-// Float the labels left
-.form-horizontal .control-group > label {
-  float: left;
-  width: 130px;
-  padding-top: 5px;
-  text-align: right;
-}
-// Move over all input controls and content
-.form-horizontal .controls {
-  margin-left: 150px;
-}
-// Move the options list down to align with labels
-.form-horizontal .control-list {
-  padding-top: 6px; // has to be padding because margin collaspes
-}
-// Move over buttons in .form-actions to align with .controls
-.form-horizontal .form-actions {
-  padding-left: 150px;
+.horizontal-form {
+  // Float the labels left
+  .control-group > label {
+    float: left;
+    width: 130px;
+    padding-top: 5px;
+    text-align: right;
+  }
+  // Move over all input controls and content
+  .controls {
+    margin-left: 150px;
+  }
+  // Move the options list down to align with labels
+  .control-list {
+    padding-top: 6px; // has to be padding because margin collaspes
+  }
+  // Move over buttons in .form-actions to align with .controls
+  .form-actions {
+    padding-left: 150px;
+  }
 }
