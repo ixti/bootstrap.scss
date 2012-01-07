@@ -12,9 +12,9 @@ def parse file
 end
 
 def show_diff k, a, b
-  puts "=== Order difference only..." if a.split(' ').sort == b.split(' ').sort
   puts "--- #{$a_file}: (#{k}) #{a}"
   puts "+++ #{$b_file}: (#{k}) #{b}"
+  puts "### Order difference only..." if a.split(' ').sort == b.split(' ').sort
   puts ""
 end
   
