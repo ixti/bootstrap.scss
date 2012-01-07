@@ -263,9 +263,22 @@ textarea.xxlarge {
 input,
 textarea {
   // Default columns
-  @each $n in 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 {
-    &.span#{$n} { @include formColumns($n); }
-  }
+  &.span1     { @include formColumns(1); }
+  &.span2     { @include formColumns(2); }
+  &.span3     { @include formColumns(3); }
+  &.span4     { @include formColumns(4); }
+  &.span5     { @include formColumns(5); }
+  &.span6     { @include formColumns(6); }
+  &.span7     { @include formColumns(7); }
+  &.span8     { @include formColumns(8); }
+  &.span9     { @include formColumns(9); }
+  &.span10    { @include formColumns(10); }
+  &.span11    { @include formColumns(11); }
+  &.span12    { @include formColumns(12); }
+  &.span13    { @include formColumns(13); }
+  &.span14    { @include formColumns(14); }
+  &.span15    { @include formColumns(15); }
+  &.span16    { @include formColumns(16); }
 }
 
 // Disabled and read-only inputs
