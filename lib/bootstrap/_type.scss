@@ -50,20 +50,20 @@ h3 {
     font-size: 14px;
   }
 }
+h4, h5, h6 {
+  line-height: $baseLineHeight;
+}
 h4 {
-  font-size: 16px;
-  line-height: $baseLineHeight * 2;
+  font-size: 14px;
   small {
     font-size: 12px;
   }
 }
 h5 {
-  font-size: 14px;
-  line-height: $baseLineHeight;
+  font-size: 12px;
 }
 h6 {
-  font-size: 13px;
-  line-height: $baseLineHeight;
+  font-size: 11px;
   color: $grayLight;
   text-transform: uppercase;
 }
@@ -90,7 +90,7 @@ ol {
 }
 li {
   line-height: $baseLineHeight;
-  color: $grayDark;
+  color: $gray;
 }
 ul.unstyled {
   margin-left: 0;
@@ -116,9 +116,10 @@ dl {
 
 // Horizontal rules
 hr {
-  margin: 20px 0 19px;
+  margin: $baseLineHeight 0;
   border: 0;
-  border-bottom: 1px solid #eee;
+  border-top: 1px solid #e5e5e5;
+  border-bottom: 1px solid #fff;
 }
 
 // Emphasis
@@ -205,6 +206,11 @@ pre {
   white-space: pre;
   white-space: pre-wrap;
   word-break: break-all;
+
+  // Make prettyprint styles more spaced out for readability
+  &.prettyprint {
+    margin-bottom: $baseLineHeight;
+  }
 
   // Account for some code outputs that place code tags in pre tags
   code {

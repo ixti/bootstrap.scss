@@ -3,19 +3,21 @@
 
 .twipsy {
   position: absolute;
-  z-index: 1000;
+  z-index: $zindexTwipsy;
   display: block;
   visibility: visible;
   padding: 5px;
   font-size: 11px;
   @include opacity(0);
-  &.in {
-    @include opacity(80);
-  }
-  &.above .twipsy-arrow   { @include popoverArrow_above; }
-  &.left .twipsy-arrow    { @include popoverArrow_left; }
-  &.below .twipsy-arrow   { @include popoverArrow_below; }
-  &.right .twipsy-arrow   { @include popoverArrow_right; }
+  &.in     { @include opacity(80); }
+  &.top    { margin-top:  -2px; }
+  &.right  { margin-left:  2px; }
+  &.bottom { margin-top:   2px; }
+  &.left   { margin-left: -2px; }
+  &.top .twipsy-arrow    { @include popoverArrow_top; }
+  &.left .twipsy-arrow   { @include popoverArrow_left; }
+  &.bottom .twipsy-arrow { @include popoverArrow_bottom; }
+  &.right .twipsy-arrow  { @include popoverArrow_right; }
 }
 .twipsy-inner {
   max-width: 200px;

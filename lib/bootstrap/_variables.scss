@@ -6,7 +6,7 @@
 // LINK COLORS
 // -----------
 
-$linkColor:         #0069d6;
+$linkColor:         #08c;
 $linkColorHover:    darken($linkColor, 15);
 
 
@@ -14,10 +14,10 @@ $linkColorHover:    darken($linkColor, 15);
 // -----
 
 $black:             #000;
-$grayDark:          lighten($black, 25%);
-$gray:              lighten($black, 50%);
-$grayLight:         lighten($black, 75%);
-$grayLighter:       lighten($black, 90%);
+$grayDark:          #333;
+$gray:              #555;
+$grayLight:         #999;
+$grayLighter:       #eee;
 $white:             #fff;
 
 
@@ -41,6 +41,19 @@ $gridColumns:       12;
 $gridColumnWidth:   60px;
 $gridGutterWidth:   20px;
 $siteWidth:         ($gridColumns * $gridColumnWidth) + ($gridGutterWidth * ($gridColumns - 1));
+
+// Fluid width sidebar
+$fluidSidebarWidth: 220px;
+
+
+// Z-INDEX
+// -------
+$zindexDropdown:        1000;
+$zindexFixedNavbar:     1010;
+$zindexModalBackdrop:   1020;
+$zindexModal:           1030;
+$zindexPopover:         1040;
+$zindexTwipsy:          1050;
 
 
 // THEME VARIABLES

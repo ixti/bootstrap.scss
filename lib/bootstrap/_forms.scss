@@ -42,10 +42,11 @@ input,
 textarea,
 select,
 .uneditable-input {
-  display: inline-block;
+  display: block;
   width: 210px;
   height: $baseLineHeight;
   padding: 4px;
+  margin-bottom: 9px;
   font-size: $baseFontSize;
   line-height: $baseLineHeight;
   color: $gray;
@@ -53,7 +54,8 @@ select,
   @include border-radius(3px);
 }
 
-/* Mini reset for unique input types */
+// Mini reset for unique input types
+input[type=image],
 input[type=checkbox],
 input[type=radio] {
   width: auto;
@@ -92,29 +94,76 @@ input[type=file] {
   line-height: $baseLineHeight * 1.5;
 }
 
+// Chrome on Linux and Mobile Safari need background-color
+select {
+  width: 220px; // default input width + 10px of padding that doesn't get applied
+  padding: 0;
+  vertical-align: middle;
+  background-color: $white;
+}
+
 // Make multiple select elements height not fixed
-select[multiple] {
+select[multiple],
+select[size] {
   height: inherit;
-  background-color: $white; // Fixes Chromium bug?
+}
+
+// Remove shadow from image inputs
+input[type=image] {
+  @include box-shadow(none);
 }
 
 textarea {
   height: auto;
 }
 
+
+// CHECKBOXES & RADIOS
+// -------------------
+
+// Indent the labels to position radios/checkboxes as hanging
+.radio,
+.checkbox {
+  padding-left: 18px;
+}
+.radio input[type=radio],
+.checkbox input[type=checkbox] {
+  float: left;
+  margin-left: -18px;
+}
+
+// Move the options list down to align with labels
+.controls > .radio:first-child,
+.controls > .checkbox:first-child {
+  padding-top: 6px; // has to be padding because margin collaspes
+}
+
+// Radios and checkboxes on same line
+.radio.inline,
+.checkbox.inline {
+  display: inline-block;
+  margin-bottom: 0;
+}
+.radio.inline + .radio.inline,
+.checkbox.inline + .checkbox.inline {
+  margin-left: 10px; // space out consecutive inline controls
+}
+
+
+
 // FOCUS STATE
 // -----------
 
 input,
 textarea {
-  @include box-shadow(inset 0 1px 3px rgba(0,0,0,.1));
+  @include box-shadow(inset 0 1px 1px rgba(0,0,0,.1));
   $transition: border linear .2s, box-shadow linear .2s;
   @include transition($transition);
 }
 input:focus,
 textarea:focus {
   border-color: rgba(82,168,236,.8);
-  $shadow: inset 0 1px 3px rgba(0,0,0,.1), 0 0 8px rgba(82,168,236,.6);
+  $shadow: inset 0 1px 1px rgba(0,0,0,.1), 0 0 8px rgba(82,168,236,.6);
   @include box-shadow($shadow);
   outline: 0;
 }
@@ -137,22 +186,53 @@ select:focus {
 .input-xxlarge    { width: 530px; }
 
 // Grid style input sizes
-// This is a duplication of the main grid .columns() mixin, but subtracts 10px to account for input padding and border
-@mixin formColumns($columnSpan: 1) {
-  display: inline-block;
+input[class*="span"],
+select[class*="span"],
+textarea[class*="span"],
+.uneditable-input {
   float: none;
-  width: (($gridColumnWidth - 10) * $columnSpan) + (($gridColumnWidth - 10) * ($columnSpan - 1));
   margin-left: 0;
+}
+
+// This is a duplication of the main grid .columns() mixin, but subtracts 10px to account for input padding and border
+@mixin inputColumns($columnSpan: 1) {
+  width: (($gridColumnWidth) * $columnSpan) + ($gridGutterWidth * ($columnSpan - 1)) - 10;
 }
 
 input,
 textarea,
-select,
 .uneditable-input {
   // Default columns
-  @each $n in 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 {
-    &.span#{$n} { @include formColumns($n); }
-  }
+  &.span1     { @include inputColumns(1); }
+  &.span2     { @include inputColumns(2); }
+  &.span3     { @include inputColumns(3); }
+  &.span4     { @include inputColumns(4); }
+  &.span5     { @include inputColumns(5); }
+  &.span6     { @include inputColumns(6); }
+  &.span7     { @include inputColumns(7); }
+  &.span8     { @include inputColumns(8); }
+  &.span9     { @include inputColumns(9); }
+  &.span10    { @include inputColumns(10); }
+  &.span11    { @include inputColumns(11); }
+  &.span12    { @include inputColumns(12); }
+}
+
+@mixin selectColumns($columnSpan: 1) {
+  width: (($gridColumnWidth) * $columnSpan) + ($gridGutterWidth * ($columnSpan - 1)) + 10;
+}
+select {
+  &.span1     { @include selectColumns(1); }
+  &.span2     { @include selectColumns(2); }
+  &.span3     { @include selectColumns(3); }
+  &.span4     { @include selectColumns(4); }
+  &.span5     { @include selectColumns(5); }
+  &.span6     { @include selectColumns(6); }
+  &.span7     { @include selectColumns(7); }
+  &.span8     { @include selectColumns(8); }
+  &.span9     { @include selectColumns(9); }
+  &.span10    { @include selectColumns(10); }
+  &.span11    { @include selectColumns(11); }
+  &.span12    { @include selectColumns(12); }
 }
 
 
@@ -202,16 +282,29 @@ textarea[readonly] {
   }
 }
 // Error
-form .clearfix.error {
+.control-group.error {
   @include formFieldState(#b94a48, #ee5f5b, lighten(#ee5f5b, 30%));
 }
 // Warning
-form .clearfix.warning {
+.control-group.warning {
   @include formFieldState(#c09853, #ccae64, lighten(#CCAE64, 5%));
 }
 // Success
-form .clearfix.success {
+.control-group.success {
   @include formFieldState(#468847, #57a957, lighten(#57a957, 30%));
+}
+
+// HTML5 invalid states
+// Shares styles with the .control-group.error above
+input:invalid,
+textarea:invalid,
+select:invalid {
+  color: #b94a48;
+  border-color: #ee5f5b;
+  &:focus {
+    border-color: darken(#ee5f5b, 10%);
+    @include box-shadow(0 0 6px lighten(#ee5f5b, 20%));    
+  }
 }
 
 
@@ -237,10 +330,10 @@ form .clearfix.success {
 }
 
 // Placeholder text gets special styles; can't be bundled together though for some reason
-:-moz-placeholder {
+input:-moz-placeholder {
   color: $grayLight;
 }
-::-webkit-input-placeholder {
+input::-webkit-input-placeholder {
   color: $grayLight;
 }
 
@@ -249,7 +342,7 @@ form .clearfix.success {
 // HELP TEXT
 // ---------
 
-.help-text {
+.help-block {
   margin-top: 5px;
   margin-bottom: 0;
   color: $grayLight;
@@ -262,33 +355,6 @@ form .clearfix.success {
   padding-left: 5px;
 }
 
-// Big blocks of help text
-.help-block {
-  display: block;
-  max-width: 600px;
-}
-
-
-
-// INLINE FIELDS
-// -------------
-
-.inline-inputs {
-  color: $gray;
-  span, input {
-    display: inline-block;
-  }
-  input.mini {
-    width: 60px;
-  }
-  input.small {
-    width: 90px;
-  }
-  span {
-    padding: 0 2px 0 1px;
-  }
-}
-
 
 // INPUT GROUPS
 // ------------
@@ -296,12 +362,16 @@ form .clearfix.success {
 // Allow us to put symbols and text within the input field for a cleaner look
 .input-prepend,
 .input-append {
-  input {
+  margin-bottom: 5px;
+  @include clearfix; // Clear the float to prevent wrapping
+  input,
+  .uneditable-input {
     @include border-radius(0 3px 3px 0);
   }
+  .uneditable-input {
+    border-left-color: #ccc;
+  }
   .add-on {
-    position: relative;
-    z-index: 2;
     float: left;
     display: block;
     width: auto;
@@ -329,9 +399,13 @@ form .clearfix.success {
   }
 }
 .input-append {
-  input {
+  input,
+  .uneditable-input {
     float: left;
     @include border-radius(3px 0 0 3px);
+  }
+  .uneditable-input {
+    border-right-color: #ccc;    
   }
   .add-on {
     margin-right: 0;
@@ -345,7 +419,10 @@ form .clearfix.success {
 // SEARCH FORM
 // -----------
 
-.search-form .search-query {
+.search-query {
+  padding-left: 14px;
+  padding-right: 14px;
+  margin-bottom: 0; // remove the default margin on all inputs
   @include border-radius(14px);
 }
 
@@ -356,6 +433,18 @@ form .clearfix.success {
 
 // Common properties
 // -----------------
+
+.search-form,
+.inline-form,
+.horizontal-form {
+  input,
+  textarea,
+  select,
+  .uneditable-input {
+    display: inline-block;
+    margin-bottom: 0;
+  }
+}
 
 // Margin to space out fieldsets
 .control-group {
@@ -380,10 +469,6 @@ form .clearfix.success {
   // Move over all input controls and content
   .controls {
     margin-left: 150px;
-  }
-  // Move the options list down to align with labels
-  .control-list {
-    padding-top: 6px; // has to be padding because margin collaspes
   }
   // Move over buttons in .form-actions to align with .controls
   .form-actions {

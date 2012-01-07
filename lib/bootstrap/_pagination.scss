@@ -5,7 +5,8 @@
   height: $baseLineHeight * 2;
   margin: $baseLineHeight 0;
   ul {
-    float: left;
+    display: inline-block;
+    @include ie7-inline-block;
     margin: 0;
     border: 1px solid #ddd;
     border: 1px solid rgba(0,0,0,.15);
@@ -33,8 +34,14 @@
   .disabled a:hover {
     color: $grayLight;
     background-color: transparent;
+    cursor: default;
   }
   .next a {
     border: 0;
+  }
+
+  // Centered
+  &.centered {
+    text-align: center;
   }
 }

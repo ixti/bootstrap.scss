@@ -5,13 +5,17 @@
   position: absolute;
   top: 0;
   left: 0;
-  z-index: 1000;
+  z-index: $zindexPopover;
   display: none;
   padding: 5px;
-  &.above .arrow { @include popoverArrow_above; }
-  &.right .arrow { @include popoverArrow_right; }
-  &.below .arrow { @include popoverArrow_below; }
-  &.left .arrow  { @include popoverArrow_left; }
+  &.top    { margin-top:  -5px; }
+  &.right  { margin-left:  5px; }
+  &.bottom { margin-top:   5px; }
+  &.left   { margin-left: -5px; }
+  &.top .arrow    { @include popoverArrow_top; }
+  &.right .arrow  { @include popoverArrow_right; }
+  &.bottom .arrow { @include popoverArrow_bottom; }
+  &.left .arrow   { @include popoverArrow_left;  }
   .arrow {
     position: absolute;
     width: 0;
