@@ -21,8 +21,38 @@
 // Grid system and page structure
 @import "bootstrap/scaffolding";
 
-// Styled patterns and elements
+// Base CSS
 @import "bootstrap/type";
 @import "bootstrap/forms";
 @import "bootstrap/tables";
-@import "bootstrap/patterns";
+
+// Components: common
+@import "bootstrap/sprites";
+@import "bootstrap/dropdowns";
+@import "bootstrap/wells";
+@import "bootstrap/component-animations";
+@import "bootstrap/close";
+ 
+// Components: Nav
+@import "bootstrap/navbar";
+@import "bootstrap/tabs-pills";
+@import "bootstrap/sidenav";
+@import "bootstrap/breadcrumbs";
+@import "bootstrap/pagination";
+
+// Components: Popovers
+@import "bootstrap/modals";
+@import "bootstrap/twipsy";
+@import "bootstrap/popovers";
+
+// Components: Buttons & Alerts
+@import "bootstrap/buttons";
+@import "bootstrap/button-groups";
+@import "bootstrap/alerts"; // Note: alerts share common CSS with buttons and thus have styles in buttons
+
+// Components: Misc
+@import "bootstrap/thumbnails";
+@import "bootstrap/labels";
+
+// Responsive
+@import "bootstrap/responsive";

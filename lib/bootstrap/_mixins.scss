@@ -1,6 +1,6 @@
-/* Mixins.scss
- * Snippets of reusable CSS to develop faster and keep code readable
- * ----------------------------------------------------------------- */
+// Mixins.scss
+// Snippets of reusable CSS to develop faster and keep code readable
+// -----------------------------------------------------------------
 
 
 // Clearfix for clearing floats like a boss h5bp.com/q
@@ -9,6 +9,7 @@
   &:before,
   &:after {
     display: table;
+    *display: inline;
     content: "";
     zoom: 1;
   }
@@ -24,10 +25,16 @@
   margin-right: auto;
 }
 
+// IE7 inline-block
+@mixin ie7-inline-block {
+  *display: inline; /* IE7 inline-block hack */
+  *zoom: 1;
+}
+
 // Sizing shortcuts
 @mixin size($height: 5px, $width: 5px) {
-  height: $height;
   width: $width;
+  height: $height;
 }
 
 @mixin square($size: 5px) {
@@ -45,31 +52,37 @@
 }
 
 // Font Stacks
-@mixin font_shorthand($weight: normal, $size: 14px, $lineHeight: 20px) {
-  font-size: $size;
-  font-weight: $weight;
-  line-height: $lineHeight;
+@mixin font_family_serif() {
+  font-family: "Georgia", "Times New Roman", Times, serif;
 }
 
-@mixin font_sans-serif($weight: normal, $size: 14px, $lineHeight: 20px) {
+@mixin font_family_sans-serif() {
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+@mixin font_family_monospace() {
+  font-family: Menlo, Monaco, "Courier New", monospace;
+}
+
+@mixin font_shorthand($size: $baseFontSize, $weight: normal, $lineHeight: $baseLineHeight) {
   font-size: $size;
   font-weight: $weight;
   line-height: $lineHeight;
 }
 
-@mixin font_serif($weight: normal, $size: 14px, $lineHeight: 20px) {
-  font-family: "Georgia", Times New Roman, Times, serif;
-  font-size: $size;
-  font-weight: $weight;
-  line-height: $lineHeight;
+@mixin font_serif($size: $baseFontSize, $weight: normal, $lineHeight: $baseLineHeight) {
+  @include font_family_serif;
+  @include font_shorthand($size, $weight, $lineHeigh);
 }
 
-@mixin font_monospace($weight: normal, $size: 12px, $lineHeight: 20px) {
-  font-family: "Monaco", Courier New, monospace;
-  font-size: $size;
-  font-weight: $weight;
-  line-height: $lineHeight;
+@mixin font_sans-serif($size: $baseFontSize, $weight: normal, $lineHeight: $baseLineHeight) {
+  @include font_family_sans-serif;
+  @include font_shorthand($size, $weight, $lineHeight);
+}
+
+@mixin font_monospace($size: $baseFontSize, $weight: normal, $lineHeight: $baseLineHeight) {
+  @include font_family_monospace;
+  @include font_shorthand($size, $weight, $lineHeight);
 }
 
 // Grid System
@@ -80,17 +93,16 @@
   @include clearfix;
 }
 
-@mixin columns($columnSpan: 1) {
-  width: ($gridColumnWidth * $columnSpan) + ($gridGutterWidth * ($columnSpan - 1));
+@mixin columns($columns: 1) {
+  width: ($gridColumnWidth * $columns) + ($gridGutterWidth * ($columns - 1));
 }
 
-@mixin offset($columnOffset: 1) {
-  margin-left: ($gridColumnWidth * $columnOffset) + ($gridGutterWidth * ($columnOffset - 1)) + $extraSpace;
+@mixin offset($columns: 1) {
+  margin-left: ($gridColumnWidth * $columns) + ($gridGutterWidth * ($columns - 1)) + ($gridGutterWidth * 2);
 }
 
 // Necessary grid styles for every column to make them appear next to each other horizontally
 @mixin gridColumn {
-  display: inline;
   float: left;
   margin-left: $gridGutterWidth;
 }
@@ -106,6 +118,24 @@
   -webkit-border-radius: $radius;
      -moz-border-radius: $radius;
           border-radius: $radius;
+}
+
+@mixin border-radius-custom($topLeft, $topRight, $bottomRight, $bottomLeft) {
+  -webkit-border-top-left-radius: $topLeft;
+      -moz-border-radius-topleft: $topLeft;
+          border-top-left-radius: $topLeft;
+  -webkit-border-top-right-radius: $topRight;
+      -moz-border-radius-topright: $topRight;
+          border-top-right-radius: $topRight;
+  -webkit-border-bottom-right-radius: $bottomRight;
+      -moz-border-radius-bottomright: $bottomRight;
+          border-bottom-right-radius: $bottomRight;
+  -webkit-border-bottom-left-radius: $bottomLeft;
+      -moz-border-radius-bottomleft: $bottomLeft;
+          border-bottom-left-radius: $bottomLeft;
+  -webkit-background-clip: padding-box;
+     -moz-background-clip: padding;
+          background-clip: padding-box;
 }
 
 // Drop shadows
@@ -124,21 +154,52 @@
           transition: $transition;
 }
 
+// Transform for scale and rotate
+// translate, rotate, scale -- need to finalize
+@mixin rotate($degrees: 5deg) {
+  -webkit-transform: rotate($degrees);
+     -moz-transform: rotate($degrees);
+      -ms-transform: rotate($degrees);
+       -o-transform: rotate($degrees);
+          transform: rotate($degrees);
+}
+@mixin scale($value: 1.5) {
+  -webkit-transform: scale($value);
+     -moz-transform: scale($value);
+      -ms-transform: scale($value);
+       -o-transform: scale($value);
+          transform: scale($value);
+}
+@mixin translate($x: 0, $y: 0) {
+  -webkit-transform: translate($x, $y);
+     -moz-transform: translate($x, $y);
+      -ms-transform: translate($x, $y);
+       -o-transform: translate($x, $y);
+          transform: translate($x, $y);
+}
+
 // Background clipping
+// Heads up: FF 3.6 and under need padding instead of padding-box
 @mixin background-clip($clip) {
   -webkit-background-clip: $clip;
      -moz-background-clip: $clip;
           background-clip: $clip;
 }
 
+// Resize anything
+@mixin resizable($direction: both) {
+  resize: $direction; // Options: horizontal, vertical, both
+  overflow: auto; // Safari fix
+}
+
 // CSS3 Content Columns
 @mixin content-columns($columnCount, $columnGap: 20px) {
-	-webkit-column-count: $columnCount;
-	   -moz-column-count: $columnCount;
-            column-count: $columnCount;
-      -webkit-column-gap: $columnGap;
-         -moz-column-gap: $columnGap;
-              column-gap: $columnGap;
+  -webkit-column-count: $columnCount;
+     -moz-column-count: $columnCount;
+          column-count: $columnCount;
+    -webkit-column-gap: $columnGap;
+       -moz-column-gap: $columnGap;
+            column-gap: $columnGap;
 }
  
 // Make any element resizable for prototyping
@@ -154,13 +215,14 @@
 
 @mixin translucent_border($color: $white, $alpha: 1) {
   border-color: hsla(hue($color), saturation($color), lightness($color), $alpha);
-  background-clip: padding-box;
+  -webkit-background-clip: padding-box;
+     -moz-background-clip: padding;
+          background-clip: padding-box;
 }
 
-// Gradient Bar Colors for buttons and allerts
+// Gradient Bar Colors for buttons and alerts
 @mixin gradientBar($primaryColor, $secondaryColor) {
   @include gradient_vertical($primaryColor, $secondaryColor);
-  text-shadow: 0 -1px 0 rgba(0,0,0,.25);
   border-color: $secondaryColor $secondaryColor darken($secondaryColor, 15%);
   border-color: rgba(0,0,0,.1) rgba(0,0,0,.1) opacify(rgba(0,0,0,.1), 0.15);
 }
@@ -168,7 +230,6 @@
 // Gradients
 @mixin gradient_horizontal($startColor: #555, $endColor: #333) {
   background-color: $endColor;
-  background-repeat: repeat-x;
   background-image: -khtml-gradient(linear, left top, right top, from($startColor), to($endColor)); // Konqueror
   background-image: -moz-linear-gradient(left, $startColor, $endColor); // FF 3.6+
   background-image: -ms-linear-gradient(left, $startColor, $endColor); // IE10
@@ -176,12 +237,12 @@
   background-image: -webkit-linear-gradient(left, $startColor, $endColor); // Safari 5.1+, Chrome 10+
   background-image: -o-linear-gradient(left, $startColor, $endColor); // Opera 11.10
   background-image: linear-gradient(left, $startColor, $endColor); // Le standard
+  background-repeat: repeat-x;
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#{$startColor}', endColorstr='#{$endColor}', GradientType=1); // IE9 and down
 }
 
 @mixin gradient_vertical ($startColor: #555, $endColor: #333) {
   background-color: $endColor;
-  background-repeat: repeat-x;
   background-image: -khtml-gradient(linear, left top, left bottom, from($startColor), to($endColor)); // Konqueror
   background-image: -moz-linear-gradient(top, $startColor, $endColor); // FF 3.6+
   background-image: -ms-linear-gradient(top, $startColor, $endColor); // IE10
@@ -189,6 +250,7 @@
   background-image: -webkit-linear-gradient(top, $startColor, $endColor); // Safari 5.1+, Chrome 10+
   background-image: -o-linear-gradient(top, $startColor, $endColor); // Opera 11.10
   background-image: linear-gradient(top, $startColor, $endColor); // The standard
+  background-repeat: repeat-x;
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#{$startColor}', endColorstr='#{$endColor}', GradientType=0); // IE9 and down
 }
 
@@ -204,14 +266,24 @@
 
 @mixin gradient_vertical-three-colors($startColor: #00b3ee, $midColor: #7a43b6, $colorStop: 50%, $endColor: #c3325f) {
   background-color: $endColor;
-  background-repeat: no-repeat;
   background-image: -webkit-gradient(linear, 0 0, 0 100%, from($startColor), color-stop($colorStop, $midColor), to($endColor));
   background-image: -webkit-linear-gradient($startColor, $midColor $colorStop, $endColor);
   background-image: -moz-linear-gradient(top, $startColor, $midColor $colorStop, $endColor);
   background-image: -ms-linear-gradient($startColor, $midColor $colorStop, $endColor);
   background-image: -o-linear-gradient($startColor, $midColor $colorStop, $endColor);
   background-image: linear-gradient($startColor, $midColor $colorStop, $endColor);
+  background-repeat: no-repeat;
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#{$startColor}', endColorstr='#{$endColor}', GradientType=0); // IE9 and down, gets no color-stop at all for proper fallback
+}
+
+@mixin gradient_radial($centerColor: #555, $outsideColor: #333)  {
+  background-color: $outsideColor;
+  background-image: -webkit-gradient(radial, center center, 0, center center, 460, from($centerColor), to($outsideColor));
+  background-image: -webkit-radial-gradient(circle, $centerColor, $outsideColor);
+  background-image: -moz-radial-gradient(circle, $centerColor, $outsideColor);
+  background-image: -ms-radial-gradient(circle, $centerColor, $outsideColor);
+  background-repeat: no-repeat;
+  // Opera cannot do radial gradients yet
 }
 
 // Reset filters for IE
@@ -221,8 +293,42 @@
 
 // Opacity
 @mixin opacity($opacity: 100) {
-  filter: alpha(opacity=#{$opacity});
-  -khtml-opacity: $opacity / 100;
-    -moz-opacity: $opacity / 100;
-         opacity: $opacity / 100;
+	filter: alpha(opacity=#{$opacity});
+	  -moz-opacity: $opacity / 100;
+	       opacity: $opacity / 100;
+}
+
+// Popover arrows
+// For tipsies and popovers
+@mixin popoverArrow_top($arrowWidth: 5px) {
+  bottom: 0;
+  left: 50%;
+  margin-left: -$arrowWidth;
+  border-left: $arrowWidth solid transparent;
+  border-right: $arrowWidth solid transparent;
+  border-top: $arrowWidth solid $black;
+}
+@mixin popoverArrow_left($arrowWidth: 5px) {
+  top: 50%;
+  right: 0;
+  margin-top: -$arrowWidth;
+  border-top: $arrowWidth solid transparent;
+  border-bottom: $arrowWidth solid transparent;
+  border-left: $arrowWidth solid $black;
+}
+@mixin popoverArrow_bottom($arrowWidth: 5px) {
+  top: 0;
+  left: 50%;
+  margin-left: -$arrowWidth;
+  border-left: $arrowWidth solid transparent;
+  border-right: $arrowWidth solid transparent;
+  border-bottom: $arrowWidth solid $black;
+}
+@mixin popoverArrow_right($arrowWidth: 5px) {
+  top: 50%;
+  left: 0;
+  margin-top: -$arrowWidth;
+  border-top: $arrowWidth solid transparent;
+  border-bottom: $arrowWidth solid transparent;
+  border-right: $arrowWidth solid $black;
 }
