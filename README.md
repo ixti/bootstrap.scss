@@ -3,6 +3,9 @@ bootstrap.scss
 
 Yet another SASS port of [Twitter's Bootstrap][1] CSS toolkit.
 
+**DICONTINUED** I have no time to mantain this anymore and there's already a
+really good [port][2].
+
 
 Why there's no Makefile or docs?
 --------------------------------
@@ -27,3 +30,4 @@ Why SASS, when it was LESS?
 
 
 [1]: https://github.com/twitter/bootstrap
+[2]: https://github.com/jlong/sass-twitter-bootstrap
